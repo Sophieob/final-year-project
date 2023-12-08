@@ -1,0 +1,149 @@
+<!-- views/anatomy_quiz.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <div style="background: #C0B6FF">
+        <audio id="correctSound" src="correct.mp3"></audio>
+        <audio id="incorrectSound" src="incorrect.mp3"></audio>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Anatomy Quiz</title>
+        <link rel="stylesheet" href="/styles/quiz.css">
+    </div>
+</head>
+<body>
+    <%- include('partials/Header.ejs') %>
+    <main>
+        <div class="quiz-container">
+            <h1>Engineering Quiz</h1>
+            <div id="question-container">
+                <p id="question-text"></p>
+                <div id="options"></div>
+            </div>
+            <button id="next-button">Next</button>
+            <div id="result"></div>
+            <div id="progress"></div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; STEM E-Learning Platform</p>
+    </footer>
+
+    <script>
+        const correctSound = document.getElementById("correctSound");
+        const incorrectSound = document.getElementById("incorrectSound");
+        
+        const questions = [
+            {
+                question: "What is the measurement for resistence?",
+                options: ["Volt (V)", "Ampere (A)", "Ohm (Ω)", "Watt (W)"],
+                answer: "Ohm (Ω)",
+            },
+            {
+                question: "Which type of engineering primarily deals with the design and construction of structures such as buildings and bridges?",
+                options: ["Electrical Engineering", "Mechanical Engineering", "Civil Engineering", "Chemical Engineering"],
+                answer: "Civil Engineering",
+            },
+            {
+                question: "Which material is known for its high electrical conductivity and is often used in electrical wiring?",
+                options: ["Wood", "Plastic", "Aluminum", "Glass"],
+                answer: "Aluminum",
+            },
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+
+        const questionText = document.getElementById("question-text");
+        const optionsContainer = document.getElementById("options");
+        const nextButton = document.getElementById("next-button");
+        const resultText = document.getElementById("result");
+
+        function loadQuestion() {
+            const current = questions[currentQuestion];
+            questionText.textContent = current.question;
+
+            optionsContainer.innerHTML = "";
+            current.options.forEach((option) => {
+                const button = document.createElement("button");
+                button.textContent = option;
+                button.addEventListener("click", () => checkAnswer(option));
+                optionsContainer.appendChild(button);
+            });
+
+            if (currentQuestion === questions.length - 1) {
+                nextButton.textContent = "Finish";
+            } else {
+                nextButton.textContent = "Next";
+            }
+        }
+
+        function checkAnswer(selectedOption) {
+            const current = questions[currentQuestion];
+            if (selectedOption === current.answer) {
+                score++;
+                correctSound.play(); // Play the correct sound
+            } else {
+                // Play the incorrect sound
+                incorrectSound.play();
+            }
+            currentQuestion++;
+
+            if (currentQuestion < questions.length) {
+                loadQuestion();
+            } else {
+                showResult();
+            }
+        }
+
+        function showResult() {
+            questionText.textContent = "";
+            optionsContainer.innerHTML = "";
+            nextButton.style.display = "none";
+            resultText.textContent = `You scored ${score} out of ${questions.length} questions.`;
+
+            // Send the quiz result to the server
+            fetch('/submitQuiz', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    quizName: 'Anatomy Quiz', // Adjust the quiz name accordingly
+                    score,
+                }),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        console.log('Quiz result submitted successfully');
+                    } else {
+                        console.error('Failed to submit quiz result');
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        nextButton.addEventListener("click", () => {
+            if (currentQuestion < questions.length) {
+                loadQuestion();
+            }
+        });
+
+        loadQuestion();
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const menuToggle = document.getElementById('mobile-menu');
+            const menu = document.querySelector('nav.menu');
+
+            menuToggle.addEventListener('click', function () {
+                console.log('Toggle clicked');
+                menu.classList.toggle('active');
+                menuToggle.classList.toggle('active');
+            });
+        });
+    </script>
+</body>
+</html>

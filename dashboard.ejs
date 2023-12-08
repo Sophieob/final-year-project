@@ -1,0 +1,51 @@
+<!-- views/dashboard.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+  <link rel="stylesheet" href="/styles/dashboard.css">
+</head>
+<body>
+  <%- include('partials/Header.ejs') %>
+  <main>
+    <div class="category-box science" onclick="navigateToCategory('/science')">
+      <h2>Science</h2>
+      <img src="/images/science.png" alt="Science">
+    </div>
+    <div class="category-box technology" onclick="navigateToCategory('/technology')">
+      <h2>Technology</h2>
+      <img src="/images/technology.png" alt="Technology">
+    </div>
+    <div class="category-box engineering" onclick="navigateToCategory('/engineering')">
+      <h2>Engineering</h2>
+      <img src="/images/engineering.png" alt="Engineering">
+    </div>
+    <div class="category-box math" onclick="navigateToCategory('/math')">
+      <h2>Maths</h2>
+      <img src="/images/maths.png" alt="Maths">
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; STEM E-Learning Platform</p>
+  </footer>
+  <script>
+        function navigateToCategory(path) {
+      window.location.href = path;
+    }
+    
+    document.addEventListener('DOMContentLoaded', function () {
+    const menuToggle = document.getElementById('mobile-menu');
+    const menu = document.querySelector('nav.menu');
+
+    menuToggle.addEventListener('click', function () {
+        console.log('Toggle clicked');
+        menu.classList.toggle('active');
+        menuToggle.classList.toggle('active');
+    });
+});
+  </script>
+</body>
+</html>

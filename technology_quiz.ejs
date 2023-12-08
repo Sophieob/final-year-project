@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <div style="background: #C0B6FF">
+        <audio id="correctSound" src="correct.mp3"></audio>
+        <audio id="incorrectSound" src="incorrect.mp3"></audio>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Technology Quiz</title>
+        <link rel="stylesheet" href="/styles/quiz.css">
+    </div>
+</head>
+<body>
+    <%- include('partials/Header.ejs') %>
+    <main>
+        <div class="quiz-container">
+            <h1>Technology Quiz</h1>
+            <div id="question-container">
+                <p id="question-text"></p>
+                <div id="options"></div>
+            </div>
+            <button id="next-button">Next</button>
+            <div id="result"></div>
+            <div id="progress"></div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; STEM E-Learning Platform</p>
+    </footer>
+
+    <script>
+        const correctSound = document.getElementById("correctSound");
+        const incorrectSound = document.getElementById("incorrectSound");
+
+        const questions = [
+            {
+                question: "What does CPU stand for?",
+                options: ["Central Processing Unit", "Computer Personal Unit", "Central Power Unit", "Computer Processor Unit"],
+                answer: "Central Processing Unit",
+            },
+            {
+                question: "Which programming language is often used for web development and is known for its versatility and ease of use?",
+                options: ["Java", "Python", "JavaScript", "C++"],
+                answer: "JavaScript",
+            },
+            {
+                question: "Which company developed the Android operating system?",
+                options: ["Microsoft", "Apple", "Google", "Samsung"],
+                answer: "Google",
+            },
+        ];;
+
+        let currentQuestion = 0;
+        let score = 0;
+
+        const questionText = document.getElementById("question-text");
+        const optionsContainer = document.getElementById("options");
+        const nextButton = document.getElementById("next-button");
+        const resultText = document.getElementById("result");
+
+        function loadQuestion() {
+            const current = questions[currentQuestion];
+            questionText.textContent = current.question;
+
+            optionsContainer.innerHTML = "";
+            current.options.forEach((option) => {
+                const button = document.createElement("button");
+                button.textContent = option;
+                button.addEventListener("click", () => checkAnswer(option));
+                optionsContainer.appendChild(button);
+            });
+
+            if (currentQuestion === questions.length - 1) {
+                nextButton.textContent = "Finish";
+            } else {
+                nextButton.textContent = "Next";
+            }
+        }
+
+        function checkAnswer(selectedOption) {
+            const current = questions[currentQuestion];
+            if (selectedOption === current.answer) {
+                score++;
+                correctSound.play(); // Play the correct sound
+            } else {
+                // Play the incorrect sound
+                incorrectSound.play();
+            }
+            currentQuestion++;
+
+            if (currentQuestion < questions.length) {
+                loadQuestion();
+            } else {
+                showResult();
+            }
+        }
+
+        function showResult() {
+            questionText.textContent = "";
+            optionsContainer.innerHTML = "";
+            nextButton.style.display = "none";
+            resultText.textContent = `You scored ${score} out of ${questions.length} questions.`;
+
+            // Send the score to the server to record in the database
+            // You may use AJAX or fetch to send the data to the server
+            // Example:
+            fetch('/submitQuiz', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ quizName: 'Technology Quiz', score }),
+            });
+        }
+
+        nextButton.addEventListener("click", () => {
+            if (currentQuestion < questions.length) {
+                loadQuestion();
+            }
+        });
+
+        loadQuestion();
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const menuToggle = document.getElementById('mobile-menu');
+            const menu = document.querySelector('nav.menu');
+
+            menuToggle.addEventListener('click', function () {
+                console.log('Toggle clicked');
+                menu.classList.toggle('active');
+                menuToggle.classList.toggle('active');
+            });
+        });
+    </script>
+</body>
+</html>

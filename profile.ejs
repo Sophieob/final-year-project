@@ -1,0 +1,51 @@
+<!-- views/profile.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile</title>
+  <link rel="stylesheet" href="/styles/profile.css">
+</head>
+<body>
+  <%- include('partials/Header.ejs') %>
+  <div class="profile-container">
+    <img src="./images/avatar.avif" alt="Profile Picture" class="profile-picture">
+    <h1>Welcome, <%= user.username %>!</h1>
+    <div class="awards-container">
+      <h2>Awards:</h2>
+      <ul>
+        <% if (user.awards && user.awards.length > 0) { %>
+          <% user.awards.forEach(award => { %>
+            <li><%= award %></li>
+          <% }); %>
+        <% } else { %>
+          <li>No awards yet.</li>
+        <% } %>
+      </ul>
+    </div>
+    <% quizScores.forEach(quizScore => { %>
+      <div class="quiz-score-container">
+        <p class="quiz-score-title"><%= quizScore.quizName %></p>
+        <p class="quiz-score-value"> Best Score: <%= quizScore.score %></p>
+      </div>
+    <% }); %>
+  </div>
+  <footer>
+    <p>&copy; STEM E-Learning Platform</p>
+  </footer>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+    const menuToggle = document.getElementById('mobile-menu');
+    const menu = document.querySelector('nav.menu');
+
+    menuToggle.addEventListener('click', function () {
+        console.log('Toggle clicked');
+        menu.classList.toggle('active');
+        menuToggle.classList.toggle('active');
+    });
+});
+  </script>
+</body>
+</html>

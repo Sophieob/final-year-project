@@ -1,0 +1,54 @@
+body {
+    font-family: 'Nunito', sans-serif;
+    background-color: #F6F6F6;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .math-page {
+    max-width: 800px;
+    margin: 50px auto;
+  }
+  
+  .math-catalog {
+    background-color: #27ae60; 
+    color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .math-catalog h2 {
+    text-align: center;
+  }
+  
+  .math-catalog ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .math-catalog li {
+    margin: 8px 0;
+  }
+
+  footer {
+    background-color: #333;
+    color: #fff;
+    padding: 1em;
+    text-align: center;
+  }
+  
+  
+  /* Styles for screens with a width up to 600px */
+  @media screen and (max-width: 600px) {
+    main {
+      grid-template-columns: 1fr; 
+    }
+  }
+  
+  /* Styles for screens with a width between 601px and 1200px */
+  @media screen and (min-width: 601px) and (max-width: 1200px) {
+    main {
+      grid-template-columns: repeat(2, 1fr); 
+    }
+  }

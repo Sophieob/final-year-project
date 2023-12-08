@@ -1,0 +1,56 @@
+/* public/styles/science.css */
+
+body {
+    font-family: 'Nunito', sans-serif;
+    background-color: #F6F6F6;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .engineering-page {
+    max-width: 800px;
+    margin: 50px auto;
+  }
+  
+  .engineering-catalog {
+    background-color: #e67e22; /* Green background color */
+    color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .engineering-catalog h2 {
+    text-align: center;
+  }
+  
+  .engineering-catalog ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .engineering-catalog li {
+    margin: 8px 0;
+  }
+
+  footer {
+    background-color: #333;
+    color: #fff;
+    padding: 1em;
+    text-align: center;
+  }
+  
+  
+  /* Styles for screens with a width up to 600px */
+  @media screen and (max-width: 600px) {
+    main {
+      grid-template-columns: 1fr; /* Change to a single column layout */
+    }
+  }
+  
+  /* Styles for screens with a width between 601px and 1200px */
+  @media screen and (min-width: 601px) and (max-width: 1200px) {
+    main {
+      grid-template-columns: repeat(2, 1fr); /* Back to 2 columns */
+    }
+  }
